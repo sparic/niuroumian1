@@ -1,0 +1,68 @@
+[
+  {
+    "data": "tableName",
+    "title": "桌号",
+    "width": 100,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "beginDate",
+    "title": "开始日期",
+    "width": 120,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "endDate",
+    "title": "结束日期",
+    "width": 120,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "zoneName",
+    "title": "区域",
+    "width": 100,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "tableTypeName",
+    "title": "桌型",
+    "width": 100,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "turnTimes",
+    "title": "翻台次数",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center",
+    "defaultContent": ""
+  },
+  {
+    "data": "eatMinutes",
+    "title": "平均就餐时长（分）",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center",
+    "defaultContent": "-"
+  },
+  {
+    "data": "turnMinutes",
+    "title": "平均翻台时长（分）",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center",
+    "defaultContent": "-"
+  },
+  {
+    "title": "备注",
+    "width": 150,
+    "orderable": false,
+    "className": "dt-center",
+    "defaultContent": ""
+  }
+]

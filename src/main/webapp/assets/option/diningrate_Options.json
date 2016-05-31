@@ -1,0 +1,65 @@
+{
+  "title": {
+    "show": false,
+    "text": "就餐率同比、环比趋势图"
+  },
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "toolbox": {
+    "show": true,
+    "feature": {
+      "dataView": {"show": true, "readOnly": false},
+      "magicType": {"show": true, "type": ["line", "bar"]},
+      "restore": {"show": true},
+      "saveAsImage": {"show": true}
+    }
+  },
+  "calculable": false,
+  "legend": {
+    "data": ["排队桌数", "就餐桌数", "就餐率"]
+  },
+  "xAxis": [
+    {
+      "type": "category",
+      "data": ["前一月(yyyy-MM-dd)", "前一周(yyyy-MM-dd)", "前两天(yyyy-MM-dd)", "前一天(yyyy-MM-dd)", "当天(yyyy-MM-dd)"]
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "桌数",
+      "axisLabel": {
+        "formatter": "{value} 桌"
+      }
+    },
+    {
+      "type": "value",
+      "name": "百分比",
+      "axisLabel": {
+        "formatter": "{value} %"
+      }
+    }
+  ],
+  "series": [
+    {
+      "name": "排队桌数",
+      "type": "bar",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "data": [0,0,0,0,0]
+    },
+    {
+      "name": "就餐桌数",
+      "type": "bar",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "data": [0,0,0,0,0]
+    },
+    {
+      "name": "就餐率",
+      "type": "line",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "yAxisIndex": 1,
+      "data": [0,0,0,0,0]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+<div class="page cell bgwhite">
+    <div class="bd">
+        <ul class="cs cs_split c_list store_list">
+            <li ng-repeat="shop in shops" class="list">
+                <div class="l2"><img class="thumb" src="http://i3.s2.dpfile.com/pc/mc/d8c8f6b2e2506659225348e29fe259d4(246c184)/thumb.jpg" alt=""></div>
+                <div class="c_primary l2" ng-click="go('shop_detail/'+shop.shopId)">
+                    <h5><span>{{shop.shopName}}</span></h5>
+                    <div class="left">
+                        <div class="row">
+                            <div class="style fl">{{shop.shopType}}</div>
+                            <div class="score fr"><img src="weixin/skin/images/point-3.5.png">{{shop.score}}分</div>
+                        </div>
+                        <div class="row">
+                            <div class="avg-price fl">￥74/人</div>
+                            <div class="current-distant fr">2.21Km</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="state">
+							<span class="state-info">
+								<span class="waiting-tables-label"><span class="waiting-tables">{{shop.waiting}}</span>桌<br>在等待</span>
+							</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

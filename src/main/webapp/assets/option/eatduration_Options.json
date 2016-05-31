@@ -1,0 +1,115 @@
+{
+  "title": {
+    "show": false,
+    "text": "就餐时长桌型分布"
+  },
+  "tooltip": {
+    "trigger": "axis",
+    "showDelay": 0,
+    "axisPointer": {
+      "show": true,
+      "type": "cross",
+      "lineStyle": {
+        "type": "dashed",
+        "width": 1
+      }
+    }
+  },
+  "legend": {
+    "data": [
+      "桌型1",
+      "桌型2"
+    ]
+  },
+  "toolbox": {
+    "show": true,
+    "feature": {
+      "dataZoom": {
+        "show": true
+      },
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "xAxis": [
+    {
+      "type": "time",
+      "scale": true,
+      "axisLabel": {
+        "formatter": "HH:mm:ss"
+      }
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "scale": true,
+      "axisLabel": {
+        "formatter": "{value} 分钟"
+      }
+    }
+  ],
+  "series": [
+    {
+      "name": "桌型1",
+      "type": "scatter",
+      "data": [
+      ],
+      "markPoint": {
+        "data": [
+          {
+            "type": "max",
+            "name": "最大值"
+          },
+          {
+            "type": "min",
+            "name": "最小值"
+          }
+        ]
+      },
+      "markLine": {
+        "data": [
+          {
+            "type": "average",
+            "name": "平均值"
+          }
+        ]
+      }
+    },
+    {
+      "name": "桌型2",
+      "type": "scatter",
+      "data": [
+      ],
+      "markPoint": {
+        "data": [
+          {
+            "type": "max",
+            "name": "最大值"
+          },
+          {
+            "type": "min",
+            "name": "最小值"
+          }
+        ]
+      },
+      "markLine": {
+        "data": [
+          {
+            "type": "average",
+            "name": "平均值"
+          }
+        ]
+      }
+    }
+  ]
+}
+

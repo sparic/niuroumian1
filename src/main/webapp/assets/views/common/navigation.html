@@ -1,0 +1,97 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse" ng-controller="mainCtrl as main">
+        <ul side-navigation class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <img alt="image" class="img-circle" src="assets/img/profile_small.png"/>
+                    <a class="dropdown-toggle" href>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">{{currentUser.clientName}}</strong>
+                                </span>
+                                <span class="text-muted text-xs block">{{currentUser.orgName}}<b class="caret"></b></span>
+                            </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a ui-sref="profile" ng-click="changePassword()">修改密码</a></li>
+                        <li><a ui-sref="inbox">查看消息</a></li>
+                        <li class="divider"></li>
+                        <li><a href="./login.html">退出</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    BI+
+                </div>
+            </li>
+
+            <li ng-class="{active: $state.includes('dashboards')}">
+                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">我的主页</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('dashboards')}">
+                    <li ui-sref-active="active"><a ui-sref="dashboards.daily">我的日报</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.authority">权限管理</a></li>
+                    <li ui-sref-active="active"><a ui-sref="dashboards.schedule">调度管理</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('cockpits')}">
+                <a href="index.html"><i class="fa fa-dashboard"></i> <span class="nav-label">我的驾驶舱</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('cockpits')}">
+                    <li ui-sref-active="active"><a ui-sref="cockpits.guest">客流分析</a></li>
+                    <li ui-sref-active="active"><a ui-sref="cockpits.turnover">翻台分析</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('topics')}">
+                <a href="index.html"><i class="fa fa-flask"></i> <span class="nav-label">主题分析</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('topics')}">
+                    <li ui-sref-active="active"><a ui-sref="topics.cookstyle">菜系主题</a></li>
+                    <li ui-sref-active="active"><a ui-sref="topics.district">商圈主题</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('strategies')}">
+                <a href="index.html"><i class="fa fa-compass"></i> <span class="nav-label">战略管理</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('strategies')}">
+                    <li ui-sref-active="active"><a ui-sref="strategies.storeplan">新店规划</a></li>
+                    <li ui-sref-active="active"><a ui-sref="strategies.tableplan">餐桌分析</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('reports')}">
+                <a href="index.html"><i class="fa fa-bar-chart"></i> <span class="nav-label">报表查询</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('reports')}">
+                    <li ui-sref-active="active"><a ui-sref="reports.dinertable">排队基础报表</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reports.diningrate">就餐率同比、环比趋势图</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reports.dinercount">流失时段分布</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reports.eatduration">就餐时长分布</a></li>
+                    <li ui-sref-active="active"><a ui-sref="reports.termtable">翻台综合分析</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('metrics')}">
+                <a href="index.html"><i class="fa fa-table"></i> <span class="nav-label">数据查询</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('metrics')}">
+                    <li ui-sref-active="active"><a ui-sref="metrics.queuing">排队数据</a></li>
+                    <li ui-sref-active="active"><a ui-sref="metrics.dining">翻台数据</a></li>
+                    <li ui-sref-active="active"><a ui-sref="metrics.tableturn">翻台统计</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('profiles')}">
+                <a href="index.html"><i class="fa fa-sliders"></i> <span class="nav-label">餐厅配置</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('profiles')}">
+                    <li ui-sref-active="active"><a ui-sref="profiles.tabletype">餐桌类型</a></li>
+                    <li ui-sref-active="active"><a ui-sref="profiles.table">餐桌配置</a></li>
+                </ul>
+            </li>
+
+            <li class="landing_link">
+                <a target="_blank" href="http://www.clever-m.com"><i class="fa fa-star"></i> <span class="nav-label">木爷官网</span> <span class="label label-warning pull-right">NEW</span></a>
+            </li>
+            <li class="special_link">
+                <a target="_blank" href="http://www.clever-m.com"><i class="fa fa-leaf"></i> <span class="nav-label">合作伙伴</span></a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

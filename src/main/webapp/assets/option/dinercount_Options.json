@@ -1,0 +1,74 @@
+{
+  "title": {
+    "text": "顾客流失时段分布图",
+    "show": false,
+    "x": "center"
+  },
+  "tooltip": {
+    "trigger": "item",
+    "formatter": "{a} <br/>{b}: {c} ({d}%)"
+  },
+  "legend": {
+    "orient": "vertical",
+    "x": "left",
+    "data": [
+      "10分钟之内",
+      "10~20分钟",
+      "20~30分钟",
+      "30分钟以上"
+    ]
+  },
+  "toolbox": {
+    "show": true,
+    "feature": {
+      "dataView": {
+        "show": true,
+        "readOnly": false
+      },
+      "restore": {
+        "show": true
+      },
+      "saveAsImage": {
+        "show": true
+      }
+    }
+  },
+  "calculable": true,
+  "series": [
+    {
+      "name": "顾客流失时段分布图",
+      "itemStyle": {
+        "normal": {
+          "label": {
+            "formatter": "{b}:{c}桌",
+            "show": true
+          }
+        }
+      },
+      "type": "pie",
+      "radius": ["55%", "75%"],
+      "center": [
+        "50%",
+        "55%"
+      ],
+      "data": [
+        {
+          "value": 0,
+          "name": "10分钟之内"
+        },
+        {
+          "value": 0,
+          "name": "10~20分钟"
+        },
+        {
+          "value": 0,
+          "name": "20~30分钟"
+        },
+        {
+          "value": 0,
+          "name": "30分钟以上"
+        }
+      ]
+    }
+  ]
+}

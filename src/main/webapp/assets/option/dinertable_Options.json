@@ -1,0 +1,71 @@
+{
+  "title": {
+    "show": false,
+    "text": "排队基础报表"
+  },
+  "tooltip": {
+    "trigger": "axis"
+  },
+  "toolbox": {
+    "show": true,
+    "feature": {
+      "dataView": {"show": true, "readOnly": false},
+      "magicType": {"show": true, "type": ["line", "bar"]},
+      "restore": {"show": true},
+      "saveAsImage": {"show": true}
+    }
+  },
+  "calculable": false,
+  "legend": {
+    "data": ["排队桌数", "就餐桌数", "过号桌数", "平均等位时长"]
+  },
+  "xAxis": [
+    {
+      "type": "category",
+      "data": ["分类1"]
+    }
+  ],
+  "yAxis": [
+    {
+      "type": "value",
+      "name": "桌数",
+      "axisLabel": {
+        "formatter": "{value} 桌"
+      }
+    },
+    {
+      "type": "value",
+      "name": "时间",
+      "axisLabel": {
+        "formatter": "{value} 分钟"
+      }
+    }
+  ],
+  "series": [
+    {
+      "name": "排队桌数",
+      "type": "bar",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "data": [0]
+    },
+    {
+      "name": "就餐桌数",
+      "type": "bar",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "data": [0]
+    },
+    {
+      "name": "过号桌数",
+      "type": "bar",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "data": [0]
+    },
+    {
+      "name": "平均等位时长",
+      "type": "line",
+      "itemStyle": {"normal": {"label": {"show": true}}},
+      "yAxisIndex": 1,
+      "data": [0]
+    }
+  ]
+}

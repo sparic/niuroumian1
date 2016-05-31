@@ -1,0 +1,50 @@
+<div class="page my-queue-page">
+    <ul class="my-queue">
+        <li class="queue-item queue-item-216111748" data-serial-id="216111748">
+            <div class="queue-info">
+                <div class="header">
+                    <span class="shop-link"><h3 class="shop-name"><span class="master">{{token.shopName}}</span></h3></span>
+                    <div class="queue-state queuing"><img width="16" src="weixin/skin/images/icon_queueing.png">排队中</div>
+                </div>
+                <hr>
+                <div class="content">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td style="width:30%">前面等待：</td>
+                            <td style="width:30%">预计等待：</td>
+                            <td style="width:40%" class="queue-number" rowspan="2">
+                                <span>No.</span><strong>{{token.token}}</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="waiting-tables">
+                                <img width="16" src="weixin/skin/images/icon_queue.png">
+                                <strong class="wait-table">{{token.waitedCount}}</strong>桌
+                            </td>
+                            <td class="remaining-time">
+                                <img width="16" src="weixin/skin/images/icon_time.png">
+                                <strong class="wait-time">&gt;{{token.predictWaitingTime}}</strong>分钟
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <img class="c1" src="weixin/skin/images/round_left_upper.png">
+                <img class="c2" src="weixin/skin/images/round_right_upper.png">
+                <img class="c3" src="weixin/skin/images/round_right_lower.png">
+                <img class="c4" src="weixin/skin/images/round_left_lower.png">
+            </div>
+            <!-- 提示信息 -->
+            <div class="note"><img width="16" src="weixin/skin/images/icon_notice.png">听到叫号请到迎宾台，过号不作废，延三桌安排</div>
+            <!-- 操作 token.waitTokenId-->
+            <div class="action clearfix">
+                <div class="row">
+                    <div class="cw5 fl"><span class="action-item cancel" ng-click="view.cancelQueue()"><img width="16" src="weixin/skin/images/icon_round_one.png">取消排队</span>
+                    </div>
+                    <div class="cw5 fl"><span class="action-item order unsupport"><img width="16" src="weixin/skin/images/icon_order_disabled.png">先点菜</span>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

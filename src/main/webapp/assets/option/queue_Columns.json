@@ -1,0 +1,63 @@
+[
+  {
+    "data": "callNumber",
+    "title": "编号",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "dinerCount",
+    "title": "人数",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "tableTypeName",
+    "title": "桌型",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "timeFallIn",
+    "title": "取号时间",
+    "width": 175,
+    "className": "dt-center"
+  },
+  {
+    "data": "timeFallOut",
+    "title": "叫号时间",
+    "width": 175,
+    "className": "dt-center"
+  },
+  {
+    "data": "waitMinutes",
+    "title": "等位时长",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "waitState",
+    "title": "状态",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "data": "planTableName",
+    "title": "安排桌号",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center"
+  },
+  {
+    "title": "备注",
+    "width": 105,
+    "orderable": false,
+    "className": "dt-center",
+    "defaultContent": ""
+  }
+]

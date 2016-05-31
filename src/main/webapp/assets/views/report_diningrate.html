@@ -1,0 +1,70 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>就餐率同比、环比趋势图</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">主页</a>
+            </li>
+            <li>
+                <a>报表</a>
+            </li>
+            <li class="active">
+                <strong>就餐率同比、环比趋势图</strong>
+            </li>
+        </ol>
+    </div>
+    <div class="col-lg-2">
+
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="reportCtrl as reports">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox-content">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <select class="form-control" style="width:80px;" ng-disabled="'true'" ng-model="where.dinerType">
+                            <option value="">市别</option>
+                            <option value="1">午市</option>
+                            <option value="2">晚市</option>
+                        </select>
+                    </div>
+                    <div class="form-group m-l">
+                        <input type="datetime" placeholder="排队日期" class="form-control" style="width:150px;" date-time
+                               ng-model="where.queueDate" format="yyyy-MM-dd" view="date" min-view="date"></div>
+                        <div class="form-group">
+                            <div class="form-control m-l">
+                                <div class="checkbox"><input icheck type="checkbox" ng-model="where.before1"><i></i>前一天
+                                </div>
+                                <div class="checkbox m-l"><input icheck type="checkbox" ng-model="where.before2"><i></i>前两天
+                                </div>
+                                <div class="checkbox m-l"><input icheck type="checkbox" ng-model="where.before7"><i></i>前一周
+                                </div>
+                                <div class="checkbox m-l"><input icheck type="checkbox" ng-model="where.before30"><i></i>前一月
+                                </div>
+                            </div>
+                            <button class="btn btn-sm btn-danger m-l" type="button" ng-click="search('./chart/diningRate')">
+                                <i class="fa fa-search"></i><span class="bold">生成</span>
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>就餐率同比、环比趋势图</h5>
+                    <div ibox-tools></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="flot-chart">
+                        <div echarts class="flot-chart-content" chart-instance="echarts"
+                             option-url="diningRateOptions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
