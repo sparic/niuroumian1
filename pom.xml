@@ -178,7 +178,7 @@
             <version>1.1</version>
             <scope>provided</scope>
         </dependency>
-       <!-- <dependency>
+        <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-coyote</artifactId>
             <version>8.5.2</version>
@@ -189,8 +189,8 @@
             <artifactId>tomcat-juli</artifactId>
             <version>8.5.2</version>
             <scope>provided</scope>
-        </dependency>-->
-        <!--websocket end-->
+        </dependency>
+      <!--  websocket end-->
     </dependencies>
 
     <build>
