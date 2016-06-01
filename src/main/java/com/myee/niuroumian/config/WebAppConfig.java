@@ -90,10 +90,10 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Scope("singleton")
     public WxMpInMemoryConfigStorage wxMpConfigStorage() {
         WxMpInMemoryConfigStorage wxMpConfigStorage = new WxMpInMemoryConfigStorage();
-        wxMpConfigStorage.setAppId("wxe67244505b4041b6"); // 设置微信公众号的appid
-        wxMpConfigStorage.setSecret("ae3b4cd8a550fab663c90ab16d548579"); // 设置微信公众号的app corpSecret
-        wxMpConfigStorage.setToken("clever"); // 设置微信公众号的token
-        wxMpConfigStorage.setAesKey("DKigNihAx9rcVHKJvc9D6xBnXCFHTUe4MnTBw01bLM7"); // 设置微信公众号的EncodingAESKey
+        wxMpConfigStorage.setAppId("wxe67244505b4041b6"); // 璁剧疆寰俊鍏紬鍙风殑appid
+        wxMpConfigStorage.setSecret("ae3b4cd8a550fab663c90ab16d548579"); // 璁剧疆寰俊鍏紬鍙风殑app corpSecret
+        wxMpConfigStorage.setToken("clever"); // 璁剧疆寰俊鍏紬鍙风殑token
+        wxMpConfigStorage.setAesKey("DKigNihAx9rcVHKJvc9D6xBnXCFHTUe4MnTBw01bLM7"); // 璁剧疆寰俊鍏紬鍙风殑EncodingAESKey
         return wxMpConfigStorage;
     }
 

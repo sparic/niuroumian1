@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * websocket ÍÆËÍ¶©µ¥ĞÅÏ¢
+ * websocket æ¨é€è®¢å•ä¿¡æ¯
  * Created by Jelynn on 2016/5/31.
- * //×¢Òâ´Ë·ÃÎÊµØÖ·¸ñÊ½Èç:
- * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"ÊÇws¿ªÍ·µÄ,¶ø²»ÊÇÒÔhttp:¿ªÍ·µÄ.
+ * //æ³¨æ„æ­¤è®¿é—®åœ°å€æ ¼å¼å¦‚:
+ * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"æ˜¯wså¼€å¤´çš„,è€Œä¸æ˜¯ä»¥http:å¼€å¤´çš„.
  */
 @ServerEndpoint("/niuroumian/sendorder")
 public class OrderSender {
@@ -36,7 +36,7 @@ public class OrderSender {
     }
 
     /**
-     * ´ò¿ªÁ¬½ÓÊ±´¥·¢
+     * æ‰“å¼€è¿æ¥æ—¶è§¦å‘
      *
      * @param session
      */
@@ -50,7 +50,7 @@ public class OrderSender {
     }
 
     /**
-     * ¹Ø±ÕÁ¬½ÓÊ±´¥·¢
+     * å…³é—­è¿æ¥æ—¶è§¦å‘
      */
     @OnClose
     public void end() {
@@ -60,11 +60,11 @@ public class OrderSender {
     }
 
     /**
-     * ÏûÏ¢·¢ËÍ´¥·¢·½·¨
+     * æ¶ˆæ¯å‘é€è§¦å‘æ–¹æ³•
      * @param message
      */
     /**
-     * ÏûÏ¢·¢ËÍ´¥·¢·½·¨
+     * æ¶ˆæ¯å‘é€è§¦å‘æ–¹æ³•
      *
      * @param message
      */
@@ -77,7 +77,7 @@ public class OrderSender {
     }
 
     /**
-     * Òì³£Ê±´¥·¢
+     * å¼‚å¸¸æ—¶è§¦å‘
      *
      * @param h
      */
@@ -96,7 +96,7 @@ public class OrderSender {
     }
 
     /**
-     * ÏòÖ¸¶¨ÓÃ»§·¢ËÍÏûÏ¢
+     * å‘æŒ‡å®šç”¨æˆ·å‘é€æ¶ˆæ¯
      *
      * @param message
      */
@@ -120,7 +120,7 @@ public class OrderSender {
 
 
     /**
-     * ÏòËùÓĞÓÃ»§·¢ËÍ
+     * å‘æ‰€æœ‰ç”¨æˆ·å‘é€
      *
      * @param message
      */
