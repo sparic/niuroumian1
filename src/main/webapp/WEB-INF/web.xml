@@ -1,5 +1,5 @@
 <web-app>
-	<display-name>Cleverm BI+ Application</display-name>
+	<display-name>牛肉面</display-name>
 	<!-- log4j 配置  开始 -->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
@@ -17,4 +17,7 @@
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
 	<!-- log4j 配置  结束 -->
+	<welcome-file-list>
+		<welcome-file>websocket.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>
