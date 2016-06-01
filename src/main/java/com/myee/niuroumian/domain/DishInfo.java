@@ -15,10 +15,13 @@ public class DishInfo {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "PkGen_100")
 
     private Long dishId;
+
     @Column(name = "dish_name")
     private String dishName;
+
     @Column(name = "dish_price")
     private BigDecimal dishPrice;
+
     @Column(name = "store_id")
     private Long storeId;
 

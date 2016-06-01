@@ -16,10 +16,13 @@ public class UserInfo {
 
     @Column(name = "open_id")
     private String openId;
+
     @Column(name = "user_name")
     private String userName;
+
     @Column(name = "password")
     private String password;
+
     @Column(name = "mobile_num")
     private Long mobileNum;
 
