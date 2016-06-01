@@ -1,9 +1,16 @@
 package com.myee.niuroumian.websocket;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.myee.niuroumian.domain.OrderInfo;
 import com.myee.niuroumian.filter.HTMLFilter;
+import com.myee.niuroumian.response.ResponseData;
+import com.myee.niuroumian.service.order.OrderService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -19,131 +26,121 @@ import java.util.concurrent.atomic.AtomicInteger;
  * //注意此访问地址格式如:
  * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"是ws开头的,而不是以http:开头的.
  */
-@ServerEndpoint("/niuroumian/sendorder")
+@ServerEndpoint("/niuroumian/sendorder/{userId}")
 public class OrderSender {
 
     private static final Log LOG = LogFactory.getLog(OrderSender.class);
 
-    private static final String GUEST_PREFIX = "GUEST";
+    @Autowired
+    private OrderService orderService;
+
     private static final AtomicInteger connectionIds = new AtomicInteger(0);
     private static final Map<String, Object> connections = new HashMap<String, Object>();
 
-    private final String nickname;
+    private static  Long userId;
     private Session session;
 
-    public OrderSender() {
-        nickname = GUEST_PREFIX + connectionIds.getAndDecrement();
-    }
+//    public OrderSender() {
+//        nickname = GUEST_PREFIX + connectionIds.getAndDecrement();
+//    }
 
     /**
-     * 打开连接时触发
-     *
+     *  打开时调用
      * @param session
+     * @param userId
      */
     @OnOpen
-    public void start(@PathParam("session") Session session) {
+    public void start(Session session,@PathParam("userId") Long userId) {
         this.session = session;
-        connections.put(nickname, this);
-        String message = String.format("* %s %s", nickname, "has joined");
-        LOG.info("Websocket Start Connecting:");
-        broadcast(message);
+        this.userId = userId;
+
+        Object object = connections.get("server");
+        if(object == null || "".equals(object.toString())){
+            connections.put("server", this);
+        }
+        connections.put(String.valueOf(userId), this);
+        String message = String.format("* %s %s", userId, "has joined");
+        LOG.info("Websocket Start Connecting:" + message);
     }
 
     /**
-     * 关闭连接时触发
+     * 关闭时调用
      */
     @OnClose
     public void end() {
         connections.remove(this);
-        String message = String.format("* %s %s", nickname, "has disconnected");
-        broadcast(message);
+        String message = String.format("* %s %s", userId, "has disconnected");
+        LOG.info(message);
     }
 
-    /**
-     * 消息发送触发方法
-     * @param message
-     */
-    /**
-     * 消息发送触发方法
-     *
-     * @param message
-     */
     @OnMessage
     public void incoming(String message) {
-        // Never trust the client
-        String filteredMessage = String.format("%s: %s",
-                nickname, HTMLFilter.filter(message.toString()));
-        broadcast(filteredMessage);
+        JSONObject object = JSON.parseObject(message);
+        if(StringUtils.isNotBlank(message)){
+            OrderInfo orderInfo = new OrderInfo();
+            Long dishId = object.getLong("dishId");
+            orderInfo.setDishId(dishId);
+            Long shopId = object.getLong("shopId");
+            orderInfo.setShopId(shopId);
+            orderInfo.setUserId(userId);
+            OrderInfo orderResult = orderService.createOrder(orderInfo);
+            broadcast(orderResult);
+        }
     }
 
     /**
-     * 异常时触发
-     *
+     * 错误是触发
      * @param h
      */
     @OnError
-    public void onError(@PathParam("h") Throwable h) {
+    public void onError(Throwable h) {
         LOG.error("Send Error: " + h.toString(), h);
     }
 
-    public static void broadcast(String message) {
-
-        if (message.indexOf("Guest0") != -1) {
-            sendUser(message);
-        } else {
-            sendAll(message);
-        }
+    public static void broadcast(Object message) {
+        sendMessageToUser(message);
+        sendMessageToServer(message);
     }
 
     /**
-     * 向指定用户发送消息
-     *
+     * 发送给用户
      * @param message
      */
-    public static void sendUser(String message) {
-        OrderSender c = (OrderSender) connections.get("Guest0");
+    public static void sendMessageToUser(Object message) {
+        OrderSender userC = (OrderSender) connections.get(String.valueOf(userId));
         try {
-            c.session.getBasicRemote().sendText(message);
+            userC.session.getBasicRemote().sendObject(ResponseData.successData(message));
         } catch (IOException e) {
-            LOG.debug("Chat Error: Failed to send message to client", e);
-            connections.remove(c);
+            LOG.debug("Chat Error: Failed to send message to user", e);
+            connections.remove(userC);
             try {
-                c.session.close();
+                userC.session.close();
             } catch (IOException e1) {
-                // Ignore
+                LOG.error(userC.userId+ "has been disconnected.",e);
             }
-            String msg = String.format("* %s %s",
-                    c.nickname, "has been disconnected.");
-            broadcast(msg);
+        } catch (EncodeException e) {
+            e.printStackTrace();
         }
     }
 
-
     /**
-     * 向所有用户发送
-     *
+     * 发送给点单员
      * @param message
      */
-    public static void sendAll(String message) {
-        for (String key : connections.keySet()) {
-            OrderSender client = null;
+    public static void sendMessageToServer(Object message) {
+        OrderSender serverC = (OrderSender) connections.get("server");
+        try {
+            serverC.session.getBasicRemote().sendObject(ResponseData.successData(message));
+        } catch (IOException e) {
+            LOG.debug("Chat Error: Failed to send message to server", e);
+            connections.remove(serverC);
             try {
-                client = (OrderSender) connections.get(key);
-                synchronized (client) {
-                    client.session.getBasicRemote().sendText(message);
-                }
-            } catch (IOException e) {
-                LOG.debug("Chat Error: Failed to send message to client", e);
-                connections.remove(client);
-                try {
-                    client.session.close();
-                } catch (IOException e1) {
-                    // Ignore
-                }
-                String msg = String.format("* %s %s",
-                        client.nickname, "has been disconnected.");
-                broadcast(msg);
+                serverC.session.close();
+            } catch (IOException e1) {
+                LOG.error("server has been disconnected.",e);
             }
+        } catch (EncodeException e) {
+            e.printStackTrace();
         }
     }
 }
