@@ -51,7 +51,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Bean
     DataSource dataSource() {
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-        return lookup.getDataSource("java:comp/env/jdbc/freightDS");
+        return lookup.getDataSource("java:comp/env/jdbc/niuroumianDS");
     }
 
     @Bean
