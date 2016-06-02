@@ -40,7 +40,11 @@ public class OrderSender {
     private static  Long userId;
     private Session session;
 
-//    public OrderSender() {
+    public OrderSender(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    //    public OrderSender() {
 //        nickname = GUEST_PREFIX + connectionIds.getAndDecrement();
 //    }
 
