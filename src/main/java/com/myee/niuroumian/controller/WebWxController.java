@@ -2,6 +2,8 @@ package com.myee.niuroumian.controller;
 
 import com.myee.niuroumian.service.WeixinService;
 import com.myee.niuroumian.util.Constant;
+import com.myee.niuroumian.util.ControllerUtil;
+import com.myee.niuroumian.util.StringUtil;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSession;
@@ -20,6 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import weixin.popular.api.PayMchAPI;
+import weixin.popular.api.SnsAPI;
+import weixin.popular.api.TokenAPI;
+import weixin.popular.api.UserAPI;
+import weixin.popular.bean.paymch.Unifiedorder;
+import weixin.popular.bean.paymch.UnifiedorderResult;
+import weixin.popular.bean.sns.SnsToken;
+import weixin.popular.bean.token.Token;
+import weixin.popular.bean.user.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +49,7 @@ public class WebWxController {
     private static final String wpSite = "http://www.myee7.com/biplus";
 
     @Autowired
-    private WeixinService weixinService;
+    private WeixinService weixinService;//
 
     @Autowired
     private WxMpService wxMpService;
@@ -63,9 +74,13 @@ public class WebWxController {
 
         PrintWriter out = resp.getWriter();
         String signature = req.getParameter("signature");
+        System.out.println("===================signature:"+signature);
         String nonce = req.getParameter("nonce");
+        System.out.println("================nonce:"+nonce);
         String timestamp = req.getParameter("timestamp");
+        System.out.println("=====================timestamp:"+timestamp);
         String echostr = req.getParameter("echostr");
+        System.out.println("=====d============echostr:"+echostr);
 
         // 默认返回的文本消息内容
         String respContent = "请求处理异常，请稍候尝试！";
@@ -83,7 +98,7 @@ public class WebWxController {
                 if(inMessage.getMsgType() != null && inMessage.getMsgType().equals(WxConsts.XML_MSG_EVENT) && inMessage.getEvent() != null && inMessage.getEvent().equals(WxConsts.EVT_SCAN)) {
                     String url = "";
                     //获取快速订餐的菜单
-                    map = quickOrderMenu();
+                    map = quickOrderMenu(1L);
                     map.put("openId", openId);
                     map.put("url", url);
                 }
@@ -92,7 +107,7 @@ public class WebWxController {
                 if(inMessage.getMsgType() != null && inMessage.getMsgType().equals(WxConsts.XML_MSG_EVENT) && inMessage.getEvent() != null && inMessage.getEvent().equals(WxConsts.EVT_SUBSCRIBE) && inMessage.getTicket() != null) {
                     String url = "";
                     //获取快速订餐的菜单
-                    map = quickOrderMenu();
+                    map = quickOrderMenu(1L);
                     map.put("openId", openId);
                     map.put("url", url);
                 }
@@ -106,7 +121,7 @@ public class WebWxController {
                 WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
                 out.write(outMessage.toEncryptedXml(wxMpConfigStorage));
             } else {
-                logger.error("不可识别的加密类型");
+                logger.error("不可识别的加密类型aaaa");
                 out.write("不可识别的加密类型");
             }
         } catch (Exception e) {
@@ -120,8 +135,20 @@ public class WebWxController {
      * 快速点餐菜单推送
      * @return
      */
-    public Map quickOrderMenu() {
-        Map map = weixinService.findQuickOrderMenu();
+    public Map quickOrderMenu(Long storeId) {
+        Map map = weixinService.findQuickOrderMenu(storeId);
+        return map;
+    }
+
+    /**
+     * 快速点餐菜单推送1
+     * @return
+     */
+    @RequestMapping(value = "quickPushMenu")
+    @ResponseBody
+    public Map quickOrderMenu2(Long storeId) {
+        System.out.println("++++++++++++++++++++++++++++++storeId：" + storeId);
+        Map map = weixinService.findQuickOrderMenu(storeId);
         return map;
     }
 
@@ -161,4 +188,104 @@ public class WebWxController {
         return  user;
     }
 
+
+    @RequestMapping("/home")
+    public SnsToken home(HttpServletRequest request, HttpServletResponse response) {
+        String code = request.getParameter("code");
+        System.out.println("===========code:" + code);
+        SnsToken snsToken = new SnsToken();
+        if (!"authdeny".equals(code) & code != null) {
+            snsToken = getSnsToken("wxe67244505b4041b6","ae3b4cd8a550fab663c90ab16d548579",code);
+        } else {
+
+        }
+
+        return snsToken;
+    }
+
+    /**
+     * <暂时无用>
+     * 获取用户基本信息
+     * @param access_token access_token
+     * @param openid openid
+     * @return User
+     */
+    public User getUserInfo(String access_token,String openid){
+        User user = UserAPI.userInfo(access_token, openid);
+        return user;
+    }
+
+    /**
+     * *<暂时无用>
+     * 获取access_token
+     * @param appid appid
+     * @param secret secret
+     * @return Token
+     */
+    public Token getToken(String appid,String secret){
+        Token token = TokenAPI.token(appid, secret);
+        return token;
+    }
+
+    /**
+     * 通过code换取网页授权access_token
+     * @param appid appid
+     * @param secret secret
+     * @param code code
+     * @return SnsToken
+     */
+    public SnsToken getSnsToken(String appid,String secret,String code){
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appid, secret, code);
+        return snsToken;
+    }
+
+    /**
+     * 拉取用户信息(需scope为 snsapi_userinfo)
+     * @param access_token access_token
+     * @param openid openid
+     * @param lang 国家地区语言版本，zh_CN 简体，zh_TW 繁体，en 英语
+     * @return User
+     */
+    public User getUser(String access_token,String openid,String lang){
+        User user = SnsAPI.userinfo(access_token, openid, lang);
+        return user;
+    }
+
+    /**
+     * 微信支付统一下单
+     * @param unifiedorder unifiedorder
+     * @param key key
+     * @return UnifiedorderResult
+     */
+    @RequestMapping("pay")
+    public UnifiedorderResult payUnifiedorder(Unifiedorder unifiedorder,String key){
+        unifiedorder.setNonce_str(ControllerUtil.getRandomStringByLength(32));
+        unifiedorder.setBody("商品名称");
+        unifiedorder.setNotify_url("http://xxxx:8080/niuroumian/pay/busNoticeWeiXin");//回调
+        unifiedorder.setOut_trade_no("订单号");
+        unifiedorder.setSpbill_create_ip("210.14.72.168");// 这里需要服务器地址，就用这个图片地址了，因为图片也是这个地址
+        unifiedorder.setTotal_fee("0.11");
+        unifiedorder.setAttach("4;");
+
+        unifiedorder.setAppid("");
+        unifiedorder.setMch_id("");
+        unifiedorder.setDevice_info("WEB");
+        unifiedorder.setTrade_type("JSAPI");
+        unifiedorder.setOpenid("");
+
+        UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder, key);
+        Map<String, Object> payMap = new HashMap<String, Object>();
+        payMap.put("appId", "");
+        Long timeStamp = System.currentTimeMillis() / 1000;
+        payMap.put("timeStamp", timeStamp);
+        String nonce_str = ControllerUtil.getRandomStringByLength(32);
+        payMap.put("nonceStr", nonce_str);
+        payMap.put("signType", "MD5");
+        String prepay_id = unifiedorderResult.getPrepay_id();
+        payMap.put("package", "prepay_id=" + prepay_id);
+        String paySign = ControllerUtil.getSign(payMap,key);
+        unifiedorderResult.setSign(paySign);
+        unifiedorderResult.setNonce_str(nonce_str);
+        return unifiedorderResult;
+    }
 }

@@ -6,5 +6,7 @@ import java.util.Map;
  * Created by Ray.Fu on 2016/6/1.
  */
 public interface WeixinService {
-    Map findQuickOrderMenu();
+    Map findQuickOrderMenu(Long storeId);
+
+    void initQuickMenu(Long storeId);
 }
