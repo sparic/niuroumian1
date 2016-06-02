@@ -231,6 +231,7 @@ public class WebWxController {
      * @param key key
      * @return UnifiedorderResult
      */
+    @RequestMapping("pay")
     public UnifiedorderResult payUnifiedorder(Unifiedorder unifiedorder,String key){
         unifiedorder.setNonce_str(ControllerUtil.getRandomStringByLength(32));
         unifiedorder.setBody("商品名称");
