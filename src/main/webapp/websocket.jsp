@@ -7,7 +7,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-    <title>娴嬭瘯</title>
+    <title>测试</title>
     <style type="text/css">
         input#chat {
             width: 410px
@@ -67,18 +67,23 @@
 
         Chat.initialize = function() {
             if (window.location.protocol == 'http:') {
-                Chat.connect('ws://' + window.location.host + '/niuroumian/sendorder');
+                Chat.connect('ws://' + window.location.host + '/niuroumian/sendorder/110');
             } else {
-                Chat.connect('wss://' + window.location.host + '/niuroumian/sendorder');
+                Chat.connect('wss://' + window.location.host + '/niuroumian/sendorder/110');
             }
         };
 
         Chat.sendMessage = (function() {
-            var message = document.getElementById('chat').value;
-            if (message != '') {
-                Chat.socket.send(message);
+//            var message = document.getElementById('chat').value;
+//            if (message != '') {
+
+                var message = new Object();
+                message.shopId = "1234";
+                message.dishId="124";
+                message.requestCode="101";
+                Chat.socket.send(JSON.stringify(message));
                 document.getElementById('chat').value = '';
-            }
+//            }
         });
 
         var Console = {};
@@ -121,5 +126,7 @@
     <div id="console-container">
         <div id="console"/>
     </div>
+
+    <input type="button" value="提交" onclick=" Chat.sendMessage()"/>
 </div>
 </body>

@@ -69,7 +69,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         adapter.setShowSql(true);
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("com.myee.niuroumian.domain", "com.myee.niuroumian.*.view");
+        factoryBean.setPackagesToScan("com.myee.niuroumian.domain", "com.myee.niuroumian");
 //        factoryBean.setMappingResources("META-INF/adempiere.xml");
         factoryBean.setJpaVendorAdapter(adapter);
         factoryBean.setDataSource(dataSource);

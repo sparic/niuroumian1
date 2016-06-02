@@ -1,4 +1,4 @@
-package com.myee.niuroumian.service.order;
+package com.myee.niuroumian.service;
 
 import com.myee.niuroumian.dao.OrderInfoDao;
 import com.myee.niuroumian.domain.OrderInfo;
@@ -10,14 +10,10 @@ import javax.transaction.Transactional;
 /**
  * Created by Jelynn on 2016/6/1.
  */
-@Service
-public class OrderService {
 
-    @Autowired
-    private OrderInfoDao orderInfoDao;
+public interface OrderService {
 
-    @Transactional
-    public OrderInfo createOrder(OrderInfo orderInfo){
-        return orderInfoDao.save(orderInfo);
-    }
+     OrderInfo createOrder(OrderInfo orderInfo);
+
+     int updateOrderState(OrderInfo orderInfo);
 }

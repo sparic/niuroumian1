@@ -4,24 +4,24 @@ package com.myee.niuroumian.websocket;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.myee.niuroumian.domain.OrderInfo;
-import com.myee.niuroumian.filter.HTMLFilter;
+import com.myee.niuroumian.domain.OrderState;
 import com.myee.niuroumian.response.ResponseData;
-import com.myee.niuroumian.service.order.OrderService;
+import com.myee.niuroumian.service.OrderService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * websocket 推送订单信息
+ * websocket 推送订单信息,取消订单，线下点单
  * Created by Jelynn on 2016/5/31.
  * //注意此访问地址格式如:
  * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"是ws开头的,而不是以http:开头的.
@@ -77,14 +77,29 @@ public class OrderSender {
     public void incoming(String message) {
         JSONObject object = JSON.parseObject(message);
         if(StringUtils.isNotBlank(message)){
+            Integer requestCode = object.getInteger("requestCode");
             OrderInfo orderInfo = new OrderInfo();
             Long dishId = object.getLong("dishId");
             orderInfo.setDishId(dishId);
             Long shopId = object.getLong("shopId");
             orderInfo.setShopId(shopId);
             orderInfo.setUserId(userId);
-            OrderInfo orderResult = orderService.createOrder(orderInfo);
-            broadcast(orderResult);
+            switch(requestCode){
+                case 101:
+                    sendOrder(orderInfo);
+                    break;
+                case 102:
+                    cancelOrder(orderInfo);
+                    break;
+                case 103:
+                    repast(orderInfo);
+                    break;
+                case 104:
+                    orderOffline(orderInfo);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -97,9 +112,49 @@ public class OrderSender {
         LOG.error("Send Error: " + h.toString(), h);
     }
 
-    public static void broadcast(Object message) {
-        sendMessageToUser(message);
-        sendMessageToServer(message);
+    /**
+     * 发送订单
+     * @param orderInfo
+     */
+    public  void sendOrder(OrderInfo orderInfo) {
+        orderInfo.setOrderType(6);
+        orderInfo.setOrderState(OrderState.WAITING.getValue());
+        OrderInfo orderResult = orderService.createOrder(orderInfo);
+        sendMessageToUser(orderResult);
+        sendMessageToServer(orderResult);
+    }
+
+    /**
+     * 取消订单
+     * @param orderInfo
+     */
+    public void cancelOrder(OrderInfo orderInfo){
+        orderInfo.setOrderState(OrderState.CANCEL.getValue());
+        int result = orderService.updateOrderState(orderInfo);
+        sendMessageToUser(result);
+        sendMessageToServer(result);
+    }
+
+    /**
+     * 传菜
+     * @param orderInfo
+     */
+    public void repast(OrderInfo orderInfo){
+        orderInfo.setOrderState(OrderState.REPASTING.getValue());
+        int result = orderService.updateOrderState(orderInfo);
+        sendMessageToUser(result);
+        sendMessageToServer(result);
+    }
+
+    /**
+     * 线下点单
+     * @param orderInfo
+     */
+    public void orderOffline(OrderInfo orderInfo){
+        orderInfo.setOrderType(7);
+        orderInfo.setOrderState(OrderState.WAITING.getValue());
+        int result = orderService.updateOrderState(orderInfo);
+        sendMessageToServer(result);
     }
 
     /**
@@ -108,19 +163,7 @@ public class OrderSender {
      */
     public static void sendMessageToUser(Object message) {
         OrderSender userC = (OrderSender) connections.get(String.valueOf(userId));
-        try {
-            userC.session.getBasicRemote().sendObject(ResponseData.successData(message));
-        } catch (IOException e) {
-            LOG.debug("Chat Error: Failed to send message to user", e);
-            connections.remove(userC);
-            try {
-                userC.session.close();
-            } catch (IOException e1) {
-                LOG.error(userC.userId+ "has been disconnected.",e);
-            }
-        } catch (EncodeException e) {
-            e.printStackTrace();
-        }
+            userC.session.getAsyncRemote().sendObject(ResponseData.successData(message));
     }
 
     /**
@@ -129,19 +172,7 @@ public class OrderSender {
      */
     public static void sendMessageToServer(Object message) {
         OrderSender serverC = (OrderSender) connections.get("server");
-        try {
-            serverC.session.getBasicRemote().sendObject(ResponseData.successData(message));
-        } catch (IOException e) {
-            LOG.debug("Chat Error: Failed to send message to server", e);
-            connections.remove(serverC);
-            try {
-                serverC.session.close();
-            } catch (IOException e1) {
-                LOG.error("server has been disconnected.",e);
-            }
-        } catch (EncodeException e) {
-            e.printStackTrace();
-        }
+            serverC.session.getAsyncRemote().sendObject(ResponseData.successData(message));
     }
 }
 

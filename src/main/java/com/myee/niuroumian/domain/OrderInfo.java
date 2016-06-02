@@ -35,13 +35,16 @@ public class OrderInfo implements Serializable {
     private Timestamp updateTime; //更新时间
 
     @Column(name = "order_time")
-    private String orderState; //订单状态
+    private int orderState; //订单状态
+
+    @Column(name="order_type")
+    private int orderType; //订单类型.  6.线上点单  7.线下点单
 
     @Column(name = "order_price")
     private BigDecimal orderPrice;  //订单金额
 
     @Column(name = "pay_state")
-    private String payState;  //支付状态
+    private int payState;  //支付状态
 
     public Long getOrderId() {
         return orderId;
@@ -91,12 +94,20 @@ public class OrderInfo implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getOrderState() {
+    public int getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(String orderState) {
+    public void setOrderState(int orderState) {
         this.orderState = orderState;
+    }
+
+    public int getPayState() {
+        return payState;
+    }
+
+    public void setPayState(int payState) {
+        this.payState = payState;
     }
 
     public BigDecimal getOrderPrice() {
@@ -107,11 +118,27 @@ public class OrderInfo implements Serializable {
         this.orderPrice = orderPrice;
     }
 
-    public String getPayState() {
-        return payState;
+    public int getOrderType() {
+        return orderType;
     }
 
-    public void setPayState(String payState) {
-        this.payState = payState;
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderInfo{" +
+                "orderId=" + orderId +
+                ", shopId=" + shopId +
+                ", userId=" + userId +
+                ", dishId=" + dishId +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", orderState=" + orderState +
+                ", orderType=" + orderType +
+                ", orderPrice=" + orderPrice +
+                ", payState=" + payState +
+                '}';
     }
 }
