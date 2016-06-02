@@ -11,19 +11,17 @@ import javax.transaction.Transactional;
 /**
  * Created by Jelynn on 2016/6/2.
  */
-@Service
+@Service("orderService")
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private OrderInfoDao orderInfoDao;
-
 
     @Transactional
     public OrderInfo createOrder(OrderInfo orderInfo){
         return orderInfoDao.save(orderInfo);
     }
 
-    @Transactional
     public int updateOrderState(OrderInfo orderInfo){
         return orderInfoDao.updateOrderState(orderInfo.getUserId(), orderInfo.getOrderId(), orderInfo.getOrderState());
     }

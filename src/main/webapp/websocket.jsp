@@ -61,7 +61,8 @@
             };
 
             Chat.socket.onmessage = function (message) {
-                Console.log(message.data);
+                var test = message.data;
+                Console.log(test);
             };
         });
 
@@ -78,7 +79,7 @@
 //            if (message != '') {
 
                 var message = new Object();
-                message.shopId = "1234";
+                message.shopId = "1200";
                 message.dishId="124";
                 message.requestCode="101";
                 Chat.socket.send(JSON.stringify(message));

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * Created by Jelynn on 2016/6/1.
  */
 @Entity
-@Table(name = "order_info")
+@Table(name = "r_order_info")
 public class OrderInfo implements Serializable {
 
     @Id
@@ -34,7 +34,7 @@ public class OrderInfo implements Serializable {
     @Column(name = "update_time")
     private Timestamp updateTime; //更新时间
 
-    @Column(name = "order_time")
+    @Column(name = "order_state")
     private int orderState; //订单状态
 
     @Column(name="order_type")
@@ -45,6 +45,9 @@ public class OrderInfo implements Serializable {
 
     @Column(name = "pay_state")
     private int payState;  //支付状态
+
+    @Column(name="remark")
+    private String remark;
 
     public Long getOrderId() {
         return orderId;
@@ -124,6 +127,14 @@ public class OrderInfo implements Serializable {
 
     public void setOrderType(int orderType) {
         this.orderType = orderType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override
