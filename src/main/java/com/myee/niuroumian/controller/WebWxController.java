@@ -76,9 +76,9 @@ public class WebWxController {
         String signature = req.getParameter("signature");
         System.out.println("===============signature:"+signature);
         String nonce = req.getParameter("nonce");
-        System.out.println("===============nonce:"+nonce);
+        System.out.println("================nonce:"+nonce);
         String timestamp = req.getParameter("timestamp");
-        System.out.println("===============timestamp:"+timestamp);
+        System.out.println("================timestamp:"+timestamp);
         String echostr = req.getParameter("echostr");
         System.out.println("===============echostr:"+echostr);
 
