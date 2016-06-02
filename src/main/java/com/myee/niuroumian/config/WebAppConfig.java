@@ -1,6 +1,6 @@
 package com.myee.niuroumian.config;
 
-import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
+import me.chanjar.weixin.mp.api.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.*;
@@ -27,9 +27,9 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.myee.niuroumian.*.dao")
+@EnableJpaRepositories(basePackages = "com.myee.niuroumian.dao")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.myee.niuroumian.*.service", "com.myee.niuroumian"})
+@ComponentScan(basePackages = {"com.myee.niuroumian.*.impl", "com.myee.niuroumian.controller"})
 @PropertySources({@PropertySource("classpath:/redis.properties")})
 @EnableWebMvc
 @EnableRedisHttpSession
@@ -51,7 +51,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Bean
     DataSource dataSource() {
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-        return lookup.getDataSource("java:comp/env/jdbc/niuroumianDS");
+        return lookup.getDataSource("java:comp/env/jdbc/freightDS");
     }
 
     @Bean
@@ -69,22 +69,12 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         adapter.setShowSql(true);
 
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("com.myee.domain.*.model", "com.myee.domain.*.view");
+        factoryBean.setPackagesToScan("com.myee.niuroumian.domain", "com.myee.niuroumian.*.view");
 //        factoryBean.setMappingResources("META-INF/adempiere.xml");
         factoryBean.setJpaVendorAdapter(adapter);
         factoryBean.setDataSource(dataSource);
         return factoryBean;
     }
-
-  /*  @Bean
-   @Scope("singleton")
-    public WxMpService wxMpService(WxMpConfigStorage wxMpConfigStorage) {
-        WxMpService wxMpService = new WxMpServiceImpl();
-        wxMpService.setWxMpConfigStorage(wxMpConfigStorage);
-        return wxMpService;
-    }
-*/
-
 
     @Bean
     @Scope("singleton")
@@ -140,4 +130,17 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return new RedisCacheManager(redisTemplate);
     }
 
+    @Bean
+    public WxMpService wxMpService(WxMpConfigStorage wxMpConfigStorage) {
+        WxMpService wxMpService = new WxMpServiceImpl();
+        wxMpService.setWxMpConfigStorage(wxMpConfigStorage);
+        return wxMpService;
+    }
+
+    @Bean
+    @Scope("singleton")
+    WxMpMessageRouter wxMpMessageRouter(WxMpService wxMpService) {
+        WxMpMessageRouter wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
+        return wxMpMessageRouter;
+    }
 }

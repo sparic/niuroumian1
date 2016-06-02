@@ -5,6 +5,7 @@ import com.myee.niuroumian.service.RedisOperation;
 import com.myee.niuroumian.service.WeixinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,11 +13,13 @@ import java.util.Map;
 /**
  * Created by Ray.Fu on 2016/6/1.
  */
+@Service
 public class WeixinServiceImpl extends RedisOperation implements WeixinService{
 
     @Autowired
     private DishDao dishDao;
 
+    @Autowired
     protected WeixinServiceImpl(RedisTemplate redisTemplate) {
         super(redisTemplate);
     }

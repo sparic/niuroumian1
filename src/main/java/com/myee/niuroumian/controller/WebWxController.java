@@ -39,10 +39,13 @@ public class WebWxController {
 
     @Autowired
     private WeixinService weixinService;
+
     @Autowired
     private WxMpService wxMpService;
+
     @Autowired
     protected WxMpConfigStorage wxMpConfigStorage;
+
     @Autowired
     private WxMpMessageRouter wxMpMessageRouter;
 
