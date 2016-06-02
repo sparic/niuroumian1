@@ -1,6 +1,7 @@
 package com.myee.niuroumian.config;
 
 import com.myee.niuroumian.service.OrderService;
+import com.myee.niuroumian.websocket.OrderSender;
 import com.myee.niuroumian.service.impl.OrderServiceImpl;
 import me.chanjar.weixin.mp.api.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +25,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.sql.DataSource;
@@ -34,10 +33,10 @@ import java.sql.SQLException;
 @Configuration
 @EnableJpaRepositories(basePackages = "com.myee.niuroumian.dao")
 @EnableTransactionManagement
+//@PropertySources({@PropertySource("classpath:/redis.properties")})
 @ComponentScan(basePackages = {"com.myee.niuroumian.*.impl", "com.myee.niuroumian.controller","com.myee.niuroumian.websocket"})
-@PropertySources({@PropertySource("classpath:/redis.properties")})
 @EnableWebMvc
-@EnableRedisHttpSession
+//@EnableRedisHttpSession
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -97,7 +96,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         return wxMpConfigStorage;
     }
 
-    @Bean
+    /*@Bean
     JedisPoolConfig jedisPoolConfig() {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(20);
@@ -105,40 +104,40 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         config.setMaxWaitMillis(5000);
         config.setTestOnBorrow(true);
         return config;
-    }
+    }*/
 
-    @Value("${redis.host}")
-    private String redisHost;
-    @Value("${redis.port}")
-    private int redisPort;
+//    @Value("${redis.host}")
+//    private String redisHost;
+//    @Value("${redis.port}")
+//    private int redisPort;
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigInDev() {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean
-    @Scope("singleton")
-    JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig poolConfig) {
-        JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
-        connectionFactory.setHostName(redisHost);
-        connectionFactory.setPort(redisPort);
-        connectionFactory.setUsePool(true);
-        connectionFactory.setPoolConfig(poolConfig);
-        return connectionFactory;
-    }
+//    @Bean
+//    @Scope("singleton")
+//    JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig poolConfig) {
+//        JedisConnectionFactory connectionFactory = new JedisConnectionFactory();
+//        connectionFactory.setHostName(redisHost);
+//        connectionFactory.setPort(redisPort);
+//        connectionFactory.setUsePool(true);
+//        connectionFactory.setPoolConfig(poolConfig);
+//        return connectionFactory;
+//    }
 
-    @Bean
-    RedisTemplate redisTemplate(JedisConnectionFactory connectionFactory) {
-        RedisTemplate redisTemplate = new RedisTemplate();
-        redisTemplate.setConnectionFactory(connectionFactory);
-        return redisTemplate;
-    }
+//    @Bean
+//    RedisTemplate redisTemplate(JedisConnectionFactory connectionFactory) {
+//        RedisTemplate redisTemplate = new RedisTemplate();
+//        redisTemplate.setConnectionFactory(connectionFactory);
+//        return redisTemplate;
+//    }
 
-    @Bean
-    CacheManager cacheManager(RedisTemplate redisTemplate) {
-        return new RedisCacheManager(redisTemplate);
-    }
+//    @Bean
+//    CacheManager cacheManager(RedisTemplate redisTemplate) {
+//        return new RedisCacheManager(redisTemplate);
+//    }
 
     @Bean
     public WxMpService wxMpService(WxMpConfigStorage wxMpConfigStorage) {
@@ -153,4 +152,14 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
         WxMpMessageRouter wxMpMessageRouter = new WxMpMessageRouter(wxMpService);
         return wxMpMessageRouter;
     }
+
+//    @Bean
+//    public OrderService orderService() {
+//        // ...
+//    }
+//
+//    @Bean
+//    public OrderSender orderSender() {
+////        return new OrderSender(new OrderService());
+//    }
 }
