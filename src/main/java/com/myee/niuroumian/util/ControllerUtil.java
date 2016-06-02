@@ -37,7 +37,7 @@ public class ControllerUtil {
     }
 
     /**
-     * 微信签名--
+     * 微信签名
      *
      * @param map
      * @param appKey
