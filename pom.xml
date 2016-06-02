@@ -153,7 +153,7 @@
             <artifactId>ECharts</artifactId>
             <version>2.2.6</version>
         </dependency>
-        <!--二维码的生成和解析 start-->
+        <!--二维码的生成和解析   start-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
@@ -190,6 +190,7 @@
             <version>8.5.2</version>
             <scope>provided</scope>
         </dependency>
+        <!--微信第三方 start-->
         <dependency>
             <groupId>com.github.liyiorg</groupId>
             <artifactId>weixin-popular</artifactId>
