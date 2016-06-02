@@ -106,7 +106,7 @@ public class WebWxController {
                 WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
                 out.write(outMessage.toEncryptedXml(wxMpConfigStorage));
             } else {
-                logger.error("不可识别的加密类型");
+                logger.error("不可识别的加密类型aaaa");
                 out.write("不可识别的加密类型");
             }
         } catch (Exception e) {
