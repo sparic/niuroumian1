@@ -1,5 +1,7 @@
 package com.myee.niuroumian.config;
 
+import com.myee.niuroumian.service.OrderService;
+import com.myee.niuroumian.service.impl.OrderServiceImpl;
 import me.chanjar.weixin.mp.api.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
@@ -16,11 +18,14 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.sql.DataSource;
@@ -29,12 +34,17 @@ import java.sql.SQLException;
 @Configuration
 @EnableJpaRepositories(basePackages = "com.myee.niuroumian.dao")
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"com.myee.niuroumian.*.impl", "com.myee.niuroumian.controller"})
+@ComponentScan(basePackages = {"com.myee.niuroumian.*.impl", "com.myee.niuroumian.controller","com.myee.niuroumian.websocket"})
 @PropertySources({@PropertySource("classpath:/redis.properties")})
 @EnableWebMvc
 @EnableRedisHttpSession
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
+    @Bean
+    public OrderService orderService() {
+        OrderService orderService = new OrderServiceImpl();
+        return orderService;
+    }
 
     @Bean
     public JpaTransactionManager transactionManager(DataSource dataSource) throws SQLException {
