@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -120,8 +121,14 @@ public class OrderSender {
         orderInfo.setOrderType(6);
         orderInfo.setOrderState(OrderState.WAITING.getValue());
         OrderInfo orderResult = orderService.createOrder(orderInfo);
-        sendMessageToUser(orderResult);
-        sendMessageToServer(orderResult);
+        try {
+            OrderSender userC = (OrderSender) connections.get(String.valueOf(userId));
+            userC.session.getBasicRemote().sendText(JSON.toJSONString(ResponseData.successData(orderResult)));
+            OrderSender serverC = (OrderSender) connections.get(orderInfo.getShopId());
+            serverC.session.getBasicRemote().sendText(JSON.toJSONString(ResponseData.successData(orderResult)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
