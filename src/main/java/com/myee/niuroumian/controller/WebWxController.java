@@ -49,7 +49,7 @@ public class WebWxController {
     private static final String wpSite = "http://www.myee7.com/biplus";
 
     @Autowired
-    private WeixinService weixinService;//
+    private WeixinService weixinService;
 
     @Autowired
     private WxMpService wxMpService;
