@@ -80,7 +80,7 @@ public class WebWxController {
         String timestamp = req.getParameter("timestamp");
         System.out.println("=====================timestamp:"+timestamp);
         String echostr = req.getParameter("echostr");
-        System.out.println("===============echostr:"+echostr);
+        System.out.println("=================echostr:"+echostr);
 
         // 默认返回的文本消息内容
         String respContent = "请求处理异常，请稍候尝试！";
