@@ -147,6 +147,7 @@ public class WebWxController {
     @RequestMapping(value = "quickPushMenu")
     @ResponseBody
     public Map quickOrderMenu2(Long storeId) {
+        System.out.println("++++++++++++++++++++++++++++++storeId：" + storeId);
         Map map = weixinService.findQuickOrderMenu(storeId);
         return map;
     }
@@ -187,6 +188,20 @@ public class WebWxController {
         return  user;
     }
 
+
+    @RequestMapping("/home")
+    public SnsToken home(HttpServletRequest request, HttpServletResponse response) {
+        String code = request.getParameter("code");
+        System.out.println("===========code:" + code);
+        SnsToken snsToken = new SnsToken();
+        if (!"authdeny".equals(code) & code != null) {
+            snsToken = getSnsToken("wxe67244505b4041b6","ae3b4cd8a550fab663c90ab16d548579",code);
+        } else {
+
+        }
+
+        return snsToken;
+    }
 
     /**
      * <暂时无用>
