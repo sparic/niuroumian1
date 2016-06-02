@@ -98,7 +98,7 @@ public class WebWxController {
                 if(inMessage.getMsgType() != null && inMessage.getMsgType().equals(WxConsts.XML_MSG_EVENT) && inMessage.getEvent() != null && inMessage.getEvent().equals(WxConsts.EVT_SCAN)) {
                     String url = "";
                     //获取快速订餐的菜单
-                    map = quickOrderMenu();
+                    map = quickOrderMenu(1L);
                     map.put("openId", openId);
                     map.put("url", url);
                 }
@@ -107,7 +107,7 @@ public class WebWxController {
                 if(inMessage.getMsgType() != null && inMessage.getMsgType().equals(WxConsts.XML_MSG_EVENT) && inMessage.getEvent() != null && inMessage.getEvent().equals(WxConsts.EVT_SUBSCRIBE) && inMessage.getTicket() != null) {
                     String url = "";
                     //获取快速订餐的菜单
-                    map = quickOrderMenu();
+                    map = quickOrderMenu(1L);
                     map.put("openId", openId);
                     map.put("url", url);
                 }
@@ -121,7 +121,7 @@ public class WebWxController {
                 WxMpXmlOutMessage outMessage = wxMpMessageRouter.route(inMessage);
                 out.write(outMessage.toEncryptedXml(wxMpConfigStorage));
             } else {
-                logger.error("不可识别的加密类型");
+                logger.error("不可识别的加密类型aaaa");
                 out.write("不可识别的加密类型");
             }
         } catch (Exception e) {
@@ -135,8 +135,19 @@ public class WebWxController {
      * 快速点餐菜单推送
      * @return
      */
-    public Map quickOrderMenu() {
-        Map map = weixinService.findQuickOrderMenu();
+    public Map quickOrderMenu(Long storeId) {
+        Map map = weixinService.findQuickOrderMenu(storeId);
+        return map;
+    }
+
+    /**
+     * 快速点餐菜单推送1
+     * @return
+     */
+    @RequestMapping(value = "quickPushMenu")
+    @ResponseBody
+    public Map quickOrderMenu2(Long storeId) {
+        Map map = weixinService.findQuickOrderMenu(storeId);
         return map;
     }
 
