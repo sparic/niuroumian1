@@ -4,6 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 订单实体
@@ -25,8 +27,13 @@ public class OrderInfo implements Serializable {
     @Column(name = "user_id")
     private Long userId;    //用户ID
 
-    @Column(name = "dish_id")
-    private Long dishId;    //商品ID
+    // mappedBy="order": 指明Order类为双向关系维护端，负责外键的更新
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "orderInfo")
+//    @OneToMany(mappedBy = "orderInfo", targetEntity = OrderItemInfo.class, cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<OrderItemInfo> items = new HashSet<OrderItemInfo>();
+
+    @Column(name = "count")
+    private int count; //商品数量
 
     @Column(name = "create_time")
     private Timestamp createTime;   //创建时间
@@ -37,7 +44,7 @@ public class OrderInfo implements Serializable {
     @Column(name = "order_state")
     private int orderState; //订单状态
 
-    @Column(name="order_type")
+    @Column(name = "order_type")
     private int orderType; //订单类型.  6.线上点单  7.线下点单
 
     @Column(name = "order_price")
@@ -46,7 +53,7 @@ public class OrderInfo implements Serializable {
     @Column(name = "pay_state")
     private int payState;  //支付状态
 
-    @Column(name="remark")
+    @Column(name = "remark")
     private String remark;
 
     public Long getOrderId() {
@@ -71,14 +78,6 @@ public class OrderInfo implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public Long getDishId() {
-        return dishId;
-    }
-
-    public void setDishId(Long dishId) {
-        this.dishId = dishId;
     }
 
     public Timestamp getCreateTime() {
@@ -137,13 +136,28 @@ public class OrderInfo implements Serializable {
         this.remark = remark;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public Set<OrderItemInfo> getItems() {
+        return items;
+    }
+
+    public void setItems(Set<OrderItemInfo> items) {
+        this.items = items;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
                 "orderId=" + orderId +
                 ", shopId=" + shopId +
                 ", userId=" + userId +
-                ", dishId=" + dishId +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", orderState=" + orderState +
@@ -151,5 +165,28 @@ public class OrderInfo implements Serializable {
                 ", orderPrice=" + orderPrice +
                 ", payState=" + payState +
                 '}';
+    }
+
+    ////////////////////////////////////
+    /**
+     * 添加订单项
+     *
+     */
+    public void addOrderItem(OrderItemInfo item) {
+        if (!this.items.contains(item)) {
+            this.items.add(item);
+            item.setOrderInfo(this);
+        }
+    }
+
+    /**
+     * 删除订单项
+     *
+     */
+    public void removeOrderItem(OrderItemInfo item) {
+        if (this.items.contains(item)) {
+            item.setOrderInfo(null);
+            this.items.remove(item);
+        }
     }
 }

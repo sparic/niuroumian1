@@ -11,11 +11,19 @@ import javax.transaction.Transactional;
 /**
  * Created by Jelynn on 2016/6/2.
  */
-@Service("orderService")
+@Service
 public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private OrderInfoDao orderInfoDao;
+
+
+    public OrderServiceImpl() {
+    }
+
+    public OrderServiceImpl(OrderInfoDao orderInfoDao) {
+        this.orderInfoDao = orderInfoDao;
+    }
 
     @Transactional
     public OrderInfo createOrder(OrderInfo orderInfo){
@@ -23,7 +31,12 @@ public class OrderServiceImpl implements OrderService{
     }
 
     public int updateOrderState(OrderInfo orderInfo){
-        return orderInfoDao.updateOrderState(orderInfo.getUserId(), orderInfo.getOrderId(), orderInfo.getOrderState());
+        return orderInfoDao.updateOrderState(orderInfo.getShopId(), orderInfo.getOrderId(), orderInfo.getOrderState());
+    }
+
+    @Override
+    public OrderInfo getOrderInfo(Long orderId) {
+        return orderInfoDao.findOne(orderId);
     }
 
 }

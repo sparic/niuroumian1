@@ -14,8 +14,8 @@ import javax.transaction.Transactional;
 public interface OrderInfoDao extends JpaRepository<OrderInfo, Long> {
 
     @Modifying
-    @Query("update OrderInfo oi set oi.orderState = ?3 where oi.userId = ?1 and oi.orderId = ?2")
+    @Query("update OrderInfo oi set oi.orderState = ?3 where oi.shopId = ?1 and oi.orderId = ?2")
     @Transactional
-    int updateOrderState(Long userId, Long orderId,int orderState);
+    int updateOrderState(Long shopId, Long orderId,int orderState);
 
 }
