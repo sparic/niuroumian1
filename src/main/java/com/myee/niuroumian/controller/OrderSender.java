@@ -11,9 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.socket.server.standard.SpringConfigurator;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -29,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * //注意此访问地址格式如:
  * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"是ws开头的,而不是以http:开头的.
  */
-@ServerEndpoint(value="/niuroumian/sendorder/{userId}",configurator = SpringConfigurator.class)
+@ServerEndpoint(value="/niuroumian/sendorder/{userId}")
 public class OrderSender {
 
     private static final Log LOG = LogFactory.getLog(OrderSender.class);

@@ -24,7 +24,7 @@ public class OrderItemInfo implements Serializable {
 //    private Long orderId;    //商品ID
 
     @ManyToOne(cascade = { CascadeType.REFRESH, CascadeType.MERGE },fetch = FetchType.EAGER,optional = false)
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "order_id",referencedColumnName = "order_id")
 //    @ManyToOne(targetEntity = OrderInfo.class, optional = false, cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 //    @JoinColumn(name = "order_id",referencedColumnName = "order_id")
     private OrderInfo orderInfo; //订单ID
