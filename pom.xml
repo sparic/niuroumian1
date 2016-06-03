@@ -204,7 +204,7 @@
             <version>4.11</version>
             <scope>provided</scope>
         </dependency>
-        <!-- JunitTest end -->
+        <!-- JunitTest en d -->
         <dependency>
             <groupId>com.github.liyiorg</groupId>
             <artifactId>weixin-popular</artifactId>
