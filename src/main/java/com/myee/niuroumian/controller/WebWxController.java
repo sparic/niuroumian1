@@ -1,9 +1,9 @@
 package com.myee.niuroumian.controller;
 
-import com.myee.niuroumian.domain.OrderInfo;
-import com.myee.niuroumian.domain.TTradingOrders;
 import com.myee.niuroumian.service.WeixinService;
-import com.myee.niuroumian.util.*;
+import com.myee.niuroumian.util.Constant;
+import com.myee.niuroumian.util.ControllerUtil;
+import com.myee.niuroumian.util.StringUtil;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSession;
@@ -20,7 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
@@ -35,9 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +43,7 @@ import java.util.Map;
  * Created by Ray.Fu on 2016/6/1.
  */
 @Controller
-@RequestMapping(value = "wxitf")
+@RequestMapping("wxitf")
 public class WebWxController {
     private Logger logger = LoggerFactory.getLogger(WebWxController.class);
     private static final String wpSite = "http://www.myee7.com/biplus";
@@ -254,138 +252,40 @@ public class WebWxController {
     }
 
     /**
-     * 支付成功回调函数
-     * @param request
-     */
-    @ResponseBody
-    @RequestMapping(value = "/busNoticeWeiXin", method = RequestMethod.POST)
-    public void busNoticeWeiXin(HttpServletRequest request) {
-        try {
-            String inputLine;
-            String notityXml = "";
-            while ((inputLine = request.getReader().readLine()) != null) {
-                notityXml += inputLine;
-            }
-            request.getReader().close();
-            WeiXinPayResData weiXinPayResData = (WeiXinPayResData) ControllerUtil.getObjectFromXML(notityXml, WeiXinPayResData.class);
-            String result_code = weiXinPayResData.getResult_code();
-            logger.info("===========微信调用保存支付订单信息start~~~~weiXinPayResData.getOut_trade_no():"+weiXinPayResData.getOut_trade_no());
-            TTradingOrders tradingOrdersData = new TTradingOrders();
-            tradingOrdersData.setMerchantNo(weiXinPayResData.getMch_id());
-            tradingOrdersData.setOrderStatus(result_code.equals("SUCCESS") ? "SUCCESS" : "FAILURE");
-            tradingOrdersData.setPayAmount(String.valueOf(Double.valueOf(weiXinPayResData.getTotal_fee()) / 100));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddHHmmss");
-            Date parse = sdf2.parse(weiXinPayResData.getTime_end());
-            String payTime2 = sdf.format(parse);
-            tradingOrdersData.setPayTime(payTime2);
-            tradingOrdersData.setPrepayId(weiXinPayResData.getPrepay_id());
-            tradingOrdersData.setRespMsg(weiXinPayResData.getReturn_msg());
-            tradingOrdersData.setSignData(weiXinPayResData.getSign());
-            tradingOrdersData.setTradingStatus(Byte.valueOf("1"));// '交易状态：1=支付成功;2=支付失败',
-            tradingOrdersData.setTransactionOrder(weiXinPayResData.getTransaction_id());
-            tradingOrdersData.setOpenId(weiXinPayResData.getOpenid());
-            tradingOrdersData.setOrdersNo(weiXinPayResData.getOut_trade_no());
-            System.out.println("============tradingOrdersData:"+tradingOrdersData);
-            Map<String, String> hm = new HashMap<String, String>();
-            hm.put("transactionOrder", weiXinPayResData.getTransaction_id());
-            logger.info("===========微信调用保存支付订单信息end~~~~");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        logger.info("BackRcvResponse接收后台通知结束");
-    }
-
-    /**
-     * 页面触发下单
-     * @param data
-     * @param request
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/payOrder")
-    public String payOrder(@RequestParam("data") String data,  HttpServletRequest request) {
-        logger.info("===============支付下单==============data："+data);
-        OrderInfo orderInfo = (OrderInfo) JsonParseUtil.jsonToObject(data, OrderInfo.class);
-        Unifiedorder unifiedorder = new Unifiedorder();
-        String openId = "oLueSs4LYOyeB2kL4I6VM4UmQnrM";
-        UnifiedorderResult unifiedorderResult = payUnifiedorder(unifiedorder, "QsxnytrdFGJSKoefsdfeHSBXCNyeufjE", orderInfo, openId);
-
-        //支付
-        if ("FAIL".equals(unifiedorderResult.getReturn_code())) {//微信支付失败
-            logger.info("===============支付失败==============");
-            String res = JsonParseUtil.objectToJson(unifiedorderResult);
-            return res;
-        }
-        // 更新订单start
-        String res = JsonParseUtil.objectToJson(unifiedorderResult);
-        // 下单成功
-        return res;
-    }
-
-    /**
      * 微信支付统一下单
-     * unifiedorder 微信支付获取预订单信息prepayId接口
      * @param unifiedorder unifiedorder
      * @param key key
      * @return UnifiedorderResult
      */
     @RequestMapping("pay")
-    public UnifiedorderResult payUnifiedorder(Unifiedorder unifiedorder,String key,OrderInfo orderInfo,String openId){
-        logger.info("===============开始支付操作==============");
+    public UnifiedorderResult payUnifiedorder(Unifiedorder unifiedorder,String key){
         unifiedorder.setNonce_str(ControllerUtil.getRandomStringByLength(32));
-        unifiedorder.setBody("商品名称");//
-        unifiedorder.setNotify_url("http://pay.myee7.com/niuroumian/wxitf/busNoticeWeiXin");//回调
-        unifiedorder.setOut_trade_no(orderInfo.getOrderId().toString());
+        unifiedorder.setBody("商品名称");
+        unifiedorder.setNotify_url("http://xxxx:8080/niuroumian/pay/busNoticeWeiXin");//回调
+        unifiedorder.setOut_trade_no("订单号");
         unifiedorder.setSpbill_create_ip("210.14.72.168");// 这里需要服务器地址，就用这个图片地址了，因为图片也是这个地址
-        unifiedorder.setTotal_fee("0.1");
-//        unifiedorder.setTotal_fee(orderInfo.getOrderPrice().toString());
+        unifiedorder.setTotal_fee("0.11");
         unifiedorder.setAttach("4;");
-        logger.info("===============开始支付orderInfo.getOrderPrice():=============="+orderInfo.getOrderPrice());
-        unifiedorder.setAppid("wxe67244505b4041b6");
-        unifiedorder.setMch_id("1295359601");
+
+        unifiedorder.setAppid("");
+        unifiedorder.setMch_id("");
         unifiedorder.setDevice_info("WEB");
         unifiedorder.setTrade_type("JSAPI");
-        unifiedorder.setOpenid(openId);
+        unifiedorder.setOpenid("");
 
         UnifiedorderResult unifiedorderResult = PayMchAPI.payUnifiedorder(unifiedorder, key);
         Map<String, Object> payMap = new HashMap<String, Object>();
-        payMap.put("appId", "wxe67244505b4041b6");
+        payMap.put("appId", "");
         Long timeStamp = System.currentTimeMillis() / 1000;
         payMap.put("timeStamp", timeStamp);
         String nonce_str = ControllerUtil.getRandomStringByLength(32);
         payMap.put("nonceStr", nonce_str);
         payMap.put("signType", "MD5");
         String prepay_id = unifiedorderResult.getPrepay_id();
-        logger.info("===============开始支付prepay_id:=============="+prepay_id);
         payMap.put("package", "prepay_id=" + prepay_id);
         String paySign = ControllerUtil.getSign(payMap,key);
         unifiedorderResult.setSign(paySign);
         unifiedorderResult.setNonce_str(nonce_str);
         return unifiedorderResult;
-    }
-
-    /**
-     * 根据用户openid获取微信用户信息
-     * @param openid
-     * @return
-     */
-    @RequestMapping(value = "/queryUserObj")
-    @ResponseBody
-    public AjaxResultObj queryUserObj(@RequestParam("openid") String openid) {
-        logger.info("获取RAM使用情况查询信息");
-        try {
-            if(org.apache.commons.lang3.StringUtils.isEmpty(openid)){
-                return AjaxResultObj.failed("请输入设备ID");
-            }
-            Token token = getToken("wxe67244505b4041b6","ae3b4cd8a550fab663c90ab16d548579");
-            User user = getUserInfo(token.getAccess_token(),openid);
-            return AjaxResultObj.success(user,"获取微信用户信息成功！","xxxx","niuroumian");
-
-        }  catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage(), e);
-            return AjaxResultObj.failed("糟了...系统出错了...");
-        }
     }
 }

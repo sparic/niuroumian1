@@ -42,7 +42,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Bean
     public OrderService orderService() {
         OrderService orderService = new OrderServiceImpl();
-        return orderService;//
+        return orderService;
     }
 
     @Bean

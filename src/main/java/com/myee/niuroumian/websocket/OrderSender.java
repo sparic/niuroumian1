@@ -81,7 +81,6 @@ public class OrderSender {
             Integer requestCode = object.getInteger("requestCode");
             OrderInfo orderInfo = new OrderInfo();
             Long dishId = object.getLong("dishId");
-            orderInfo.setDishId(dishId);
             Long shopId = object.getLong("shopId");
             orderInfo.setShopId(shopId);
             orderInfo.setUserId(userId);
