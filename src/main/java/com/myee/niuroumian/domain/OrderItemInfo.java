@@ -32,6 +32,9 @@ public class OrderItemInfo implements Serializable {
     @Column(name = "dish_id")
     private Long dishId;    //商品ID
 
+    @Column(name = "quantity")
+    private int quantity; //商品数量
+
     public Long getOrderItemId() {
         return orderItemId;
     }
@@ -56,11 +59,11 @@ public class OrderItemInfo implements Serializable {
         this.dishId = dishId;
     }
 
-//    public Long getOrderId() {
-//        return orderId;
-//    }
-//
-//    public void setOrderId(Long orderId) {
-//        this.orderId = orderId;
-//    }
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

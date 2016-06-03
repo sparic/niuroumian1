@@ -5,13 +5,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.myee.niuroumian.domain.OrderInfo;
 import com.myee.niuroumian.domain.OrderItemInfo;
-import com.myee.niuroumian.domain.OrderState;
 import com.myee.niuroumian.response.ResponseData;
 import com.myee.niuroumian.service.OrderService;
-import com.myee.niuroumian.service.WeixinService;
-import me.chanjar.weixin.mp.api.WxMpConfigStorage;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
-import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jelynn on 2016/6/3.
@@ -37,11 +33,12 @@ public class OrderController {
 
     /**
      * 取消订单/传菜
+     *
      * @return
      */
     @RequestMapping(value = "/orderCancel")
     @ResponseBody
-    public String orderCancel(@RequestParam (value="message") String message) {
+    public String orderCancel(@RequestParam(value = "message") String message) {
         JSONObject object = JSON.parseObject(message);
         if (StringUtils.isNotBlank(message)) {
             OrderInfo orderInfo = new OrderInfo();
@@ -59,20 +56,22 @@ public class OrderController {
 
     /**
      * 线下点单
+     *
      * @return
      */
     @RequestMapping(value = "/orderOffline")
     @ResponseBody
-    public String orderOffline(@RequestParam (value="orderDetail") String orderDetail) {
+    public String orderOffline(@RequestParam(value = "orderDetail") String orderDetail) {
         List<OrderItemInfo> orderItemInfoList = new ArrayList<OrderItemInfo>();
         JSONArray jsonArray = JSON.parseArray(orderDetail);
         OrderInfo orderResult = new OrderInfo();
 //        Set<OrderItemInfo> items = new HashSet<OrderItemInfo>();
-        if(jsonArray.size() > 0){
+        if (jsonArray.size() > 0) {
             OrderInfo orderInfo = new OrderInfo();
             String userId = null;
             Long shopId = null;
-            for(int i=0; i<jsonArray.size();i++){
+            int quantity=0;
+            for (int i = 0; i < jsonArray.size(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
                 OrderItemInfo orderItemInfo = new OrderItemInfo();
                 userId = object.getString("userId");
@@ -80,6 +79,7 @@ public class OrderController {
                 orderInfo.setUserId(userId);
                 orderInfo.setShopId(shopId);
                 orderItemInfo.setDishId(object.getLong("dishId"));
+                orderItemInfo.setQuantity(object.getInteger("quantity"));
 //                items.add(orderItemInfo);
                 orderItemInfo.setOrderInfo(orderInfo);
                 orderInfo.getItems().add(orderItemInfo);
@@ -89,7 +89,7 @@ public class OrderController {
             orderInfo.setCount(orderInfo.getItems().size());
             orderResult = orderService.createOrder(orderInfo);
         }
-        if(orderResult != null){
+        if (orderResult != null) {
             return JSON.toJSONString(ResponseData.successData(orderResult));
         }
         return JSON.toJSONString(ResponseData.errorData("error"));
@@ -97,13 +97,14 @@ public class OrderController {
 
     /**
      * 获取订单信息
+     *
      * @return
      */
     @RequestMapping(value = "/getOrderInfo")
     @ResponseBody
-    public String getOrderInfo(@RequestParam (value="orderId") Long orderId) {
-        OrderInfo orderInfo = orderService.getOrderInfo(orderId );
-        if(orderInfo != null){
+    public String getOrderInfo(@RequestParam(value = "orderId") Long orderId) {
+        OrderInfo orderInfo = orderService.getOrderInfo(orderId);
+        if (orderInfo != null) {
             return JSON.toJSONString(ResponseData.successData(orderInfo));
         }
         return JSON.toJSONString(ResponseData.errorData("error"));
