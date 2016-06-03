@@ -7,6 +7,4 @@ import java.util.Map;
  */
 public interface WeixinService {
     Map findQuickOrderMenu(Long storeId);
-
-    void initQuickMenu(Long storeId);
 }

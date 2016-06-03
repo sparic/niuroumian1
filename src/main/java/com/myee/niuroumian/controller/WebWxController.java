@@ -1,7 +1,5 @@
 package com.myee.niuroumian.controller;
 
-import com.myee.niuroumian.domain.OrderInfo;
-import com.myee.niuroumian.service.OrderService;
 import com.myee.niuroumian.service.WeixinService;
 import com.myee.niuroumian.util.Constant;
 import com.myee.niuroumian.util.ControllerUtil;
@@ -61,9 +59,6 @@ public class WebWxController {
 
     @Autowired
     private WxMpMessageRouter wxMpMessageRouter;
-
-    @Autowired
-    private OrderService orderService;
 
     private static String openId;
 
@@ -180,13 +175,12 @@ public class WebWxController {
     /**
      * 发送用户信息
      */
-        @RequestMapping(value = "send_user_info")
+    @RequestMapping(value = "send_user_info")
     @ResponseBody
     public WxMpUser sendUserInfo() {
         String lang = "zh_CN"; //语言
         WxMpUser user = null;
         try {
-            orderService.createOrder(new OrderInfo());
             user = wxMpService.userInfo(openId, lang);
         } catch (WxErrorException e) {
             e.printStackTrace();
