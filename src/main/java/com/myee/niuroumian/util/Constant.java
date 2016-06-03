@@ -13,4 +13,9 @@ public final class Constant {
 
     //关注公众号给推送支付失败模板消息
     public static final String TEMPLEID_PAY_FAILURE = "3333";
+
+    public static String signature ="";
+    public static String nonceStr="";
+    public static String appId="wxe67244505b4041b6";
+    public static String timestamp="";
 }
