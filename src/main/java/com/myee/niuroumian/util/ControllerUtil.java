@@ -1,5 +1,6 @@
 package com.myee.niuroumian.util;
 
+import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,6 +114,14 @@ public class ControllerUtil {
         int d1 = n / 16;
         int d2 = n % 16;
         return hexDigits[d1] + hexDigits[d2];
+    }
+
+    public static Object getObjectFromXML(String xml, Class tClass) {
+        //将从API返回的XML数据映射到Java对象
+        XStream xStreamForResponseData = new XStream();
+        xStreamForResponseData.alias("xml", tClass);
+        xStreamForResponseData.ignoreUnknownElements();//暂时忽略掉一些新增的字段
+        return xStreamForResponseData.fromXML(xml);
     }
 
 
