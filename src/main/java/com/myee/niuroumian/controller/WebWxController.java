@@ -301,7 +301,7 @@ public class WebWxController {
         cfg.setSignature(Constant.signature);
         cfg.setNonceStr(Constant.nonceStr);
 
-        logger.info("获取RAM使用情况查询信息==");
+        logger.info("获取RAM使用情况查询信息");
         try {
             return AjaxResultObj.success(cfg,"获取微信用户信息成功！","xxxx","niuroumian");
 
