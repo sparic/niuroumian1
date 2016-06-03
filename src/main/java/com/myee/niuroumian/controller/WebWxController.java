@@ -1,6 +1,8 @@
 package com.myee.niuroumian.controller;
 
+import com.myee.niuroumian.response.WeixinCfg;
 import com.myee.niuroumian.service.WeixinService;
+import com.myee.niuroumian.util.AjaxResultObj;
 import com.myee.niuroumian.util.Constant;
 import com.myee.niuroumian.util.ControllerUtil;
 import com.myee.niuroumian.util.StringUtil;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import weixin.popular.api.PayMchAPI;
 import weixin.popular.api.SnsAPI;
@@ -287,5 +290,49 @@ public class WebWxController {
         unifiedorderResult.setSign(paySign);
         unifiedorderResult.setNonce_str(nonce_str);
         return unifiedorderResult;
+    }
+
+    @RequestMapping(value = "/weixinCfg")
+    @ResponseBody
+    public AjaxResultObj weixinCfg() {
+        WeixinCfg cfg = new WeixinCfg();
+        cfg.setAppId(Constant.appId);
+        cfg.setTimestamp(Constant.timestamp);
+        cfg.setSignature(Constant.signature);
+        cfg.setNonceStr(Constant.nonceStr);
+
+        logger.info("获取RAM使用情况查询信息");
+        try {
+            return AjaxResultObj.success(cfg,"获取微信用户信息成功！","xxxx","niuroumian");
+
+        }  catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            return AjaxResultObj.failed("糟了...系统出错了...");
+        }
+    }
+
+    /**
+     * 根据用户openid获取微信用户
+     * @param openid
+     * @return
+     */
+    @RequestMapping(value = "/queryUserObj")
+    @ResponseBody
+    public AjaxResultObj queryUserObj(@RequestParam("openid") String openid) {
+        logger.info("获取微信用户信息");
+        try {
+            if(org.apache.commons.lang3.StringUtils.isEmpty(openid)){
+                return AjaxResultObj.failed("请输入openid");
+            }
+            Token token = getToken("wxe67244505b4041b6","ae3b4cd8a550fab663c90ab16d548579");
+            User user = getUserInfo(token.getAccess_token(),openid);
+            return AjaxResultObj.success(user,"获取微信用户信息成功！","xxxx","niuroumian");
+
+        }  catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage(), e);
+            return AjaxResultObj.failed("糟了...系统出错了...");
+        }
     }
 }
