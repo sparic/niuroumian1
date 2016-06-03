@@ -21,7 +21,7 @@ public class WeixinServiceImpl implements WeixinService{
     private DishDao dishDao;
 
     @Autowired
-    protected WeixinServiceImpl(DishDao dishDao) {
+       protected WeixinServiceImpl(DishDao dishDao) {
 //        super(redisTemplate);
         this.dishDao = dishDao;
     }

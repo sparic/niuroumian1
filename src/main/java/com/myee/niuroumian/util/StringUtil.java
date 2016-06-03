@@ -2,7 +2,7 @@ package com.myee.niuroumian.util;
 
 import java.math.BigDecimal;
 
-public final class StringUtil {
+public class StringUtil {
 
     public static final String EMPTY      = "";
     public static final char   WHITESPACE = ' ';
@@ -11,15 +11,15 @@ public final class StringUtil {
      * @param text
      * @return
      */
-    public static boolean isBlank(String text) {
+    public static boolean isNullOrEmpty(String text) {
         return (null == text || text.length() == 0);
     }
 
-    public static boolean isBlank(String text, boolean trimWhitespaces) {
+    public static boolean isNullOrEmpty(String text, boolean trimWhitespaces) {
         if (null != text && trimWhitespaces) {
-            return isBlank(text.trim());
+            return isNullOrEmpty(text.trim());
         }
-        return isBlank(text);
+        return isNullOrEmpty(text);
     }
 
     public static String trimEnd(String text, String postfix) {
@@ -30,7 +30,7 @@ public final class StringUtil {
     }
 
     public static String strip(String str, String stripChars) {
-        if (isBlank(str)) {
+        if (isNullOrEmpty(str)) {
             return str;
         }
         str = stripStart(str, stripChars);
@@ -77,6 +77,10 @@ public final class StringUtil {
         return str.substring(0, end);
     }
 
+    /**
+     * @param text
+     * @return
+     */
     public static String toLowerCase(String text) {
         if (null != text) {
             return text.toLowerCase();
@@ -175,5 +179,9 @@ public final class StringUtil {
             return (null == rhs);
         }
         return lhs.equals(rhs);
+    }
+
+    public static String nullToString(Object v){
+        return v == null ? "" : v.toString();
     }
 }

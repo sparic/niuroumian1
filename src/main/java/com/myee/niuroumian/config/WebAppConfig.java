@@ -1,7 +1,6 @@
 package com.myee.niuroumian.config;
 
 import com.myee.niuroumian.service.OrderService;
-import com.myee.niuroumian.websocket.OrderSender;
 import com.myee.niuroumian.service.impl.OrderServiceImpl;
 import me.chanjar.weixin.mp.api.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,18 +30,19 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.myee.niuroumian.dao")
+@EnableJpaRepositories(basePackages = "com.myee.*.dao")
 @EnableTransactionManagement
 //@PropertySources({@PropertySource("classpath:/redis.properties")})
-@ComponentScan(basePackages = {"com.myee.niuroumian.*.impl", "com.myee.niuroumian.controller","com.myee.niuroumian.websocket"})
+@ComponentScan(basePackages = {"com.myee.*.service", "com.myee.*.controller","com.myee.niuroumian.websocket"})
 @EnableWebMvc
 //@EnableRedisHttpSession
 public class WebAppConfig extends WebMvcConfigurerAdapter {
 
     @Bean
+    @Scope("singleton")
     public OrderService orderService() {
         OrderService orderService = new OrderServiceImpl();
-        return orderService;//
+        return orderService;
     }
 
     @Bean

@@ -1,4 +1,4 @@
-package com.myee.niuroumian.websocket;
+package com.myee.niuroumian.controller;
 
 
 import com.alibaba.fastjson.JSON;
@@ -11,8 +11,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.socket.server.standard.SpringConfigurator;
 
-import javax.annotation.Resource;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -27,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * //注意此访问地址格式如:
  * "ws://"+ window.location.host+"/${pageContext.request.contextPath}/test/chat"是ws开头的,而不是以http:开头的.
  */
-@ServerEndpoint("/niuroumian/sendorder/{userId}")
+@ServerEndpoint(value="/niuroumian/sendorder/{userId}",configurator = SpringConfigurator.class)
 public class OrderSender {
 
     private static final Log LOG = LogFactory.getLog(OrderSender.class);
@@ -35,15 +37,19 @@ public class OrderSender {
     @Autowired
     private OrderService orderService;
 
+    public OrderService getOrderService() {
+        return orderService;
+    }
+
+    public void setOrderService(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     private static final AtomicInteger connectionIds = new AtomicInteger(0);
     private static final Map<String, Object> connections = new HashMap<String, Object>();
 
     private static  Long userId;
     private Session session;
-
-//    public OrderSender() {
-//        nickname = GUEST_PREFIX + connectionIds.getAndDecrement();
-//    }
 
     /**
      *  打开时调用
@@ -80,8 +86,6 @@ public class OrderSender {
         if(StringUtils.isNotBlank(message)){
             Integer requestCode = object.getInteger("requestCode");
             OrderInfo orderInfo = new OrderInfo();
-            Long dishId = object.getLong("dishId");
-            orderInfo.setDishId(dishId);
             Long shopId = object.getLong("shopId");
             orderInfo.setShopId(shopId);
             orderInfo.setUserId(userId);
@@ -117,7 +121,9 @@ public class OrderSender {
      * 发送订单
      * @param orderInfo
      */
+//    @RequestMapping(value = "sendorder")
     public  void sendOrder(OrderInfo orderInfo) {
+        orderInfo = new OrderInfo();
         orderInfo.setOrderType(6);
         orderInfo.setOrderState(OrderState.WAITING.getValue());
         OrderInfo orderResult = orderService.createOrder(orderInfo);
