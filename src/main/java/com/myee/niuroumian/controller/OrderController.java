@@ -67,22 +67,25 @@ public class OrderController {
         List<OrderItemInfo> orderItemInfoList = new ArrayList<OrderItemInfo>();
         JSONArray jsonArray = JSON.parseArray(orderDetail);
         OrderInfo orderResult = new OrderInfo();
+//        Set<OrderItemInfo> items = new HashSet<OrderItemInfo>();
         if(jsonArray.size() > 0){
             OrderInfo orderInfo = new OrderInfo();
-            Long userId = null;
+            String userId = null;
             Long shopId = null;
             for(int i=0; i<jsonArray.size();i++){
                 JSONObject object = jsonArray.getJSONObject(i);
                 OrderItemInfo orderItemInfo = new OrderItemInfo();
-                userId = object.getLong("userId");
+                userId = object.getString("userId");
                 shopId = object.getLong("shopId");
                 orderInfo.setUserId(userId);
                 orderInfo.setShopId(shopId);
                 orderItemInfo.setDishId(object.getLong("dishId"));
+//                items.add(orderItemInfo);
                 orderItemInfo.setOrderInfo(orderInfo);
                 orderInfo.getItems().add(orderItemInfo);
             }
 
+//            orderInfo.setItems(items);
             orderInfo.setCount(orderInfo.getItems().size());
             orderResult = orderService.createOrder(orderInfo);
         }
