@@ -88,7 +88,6 @@ public class OrderSender {
             OrderInfo orderInfo = new OrderInfo();
             Long shopId = object.getLong("shopId");
             orderInfo.setShopId(shopId);
-            orderInfo.setUserId(userId);
             switch(requestCode){
                 case 101:
                     sendOrder(orderInfo);
