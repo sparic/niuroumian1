@@ -24,13 +24,13 @@ public class OrderInfo implements Serializable {
     @Column(name = "shop_id")
     private Long shopId;   //商铺ID
 
-    @Column(name = "user_id")
-    private Long userId;    //用户ID
-
     // mappedBy="order": 指明Order类为双向关系维护端，负责外键的更新
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "orderInfo")
 //    @OneToMany(mappedBy = "orderInfo", targetEntity = OrderItemInfo.class, cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<OrderItemInfo> items = new HashSet<OrderItemInfo>();
+
+    @Column(name = "user_id")
+    private String userId;    //用户ID
 
     @Column(name = "count")
     private int count; //商品数量
@@ -72,11 +72,11 @@ public class OrderInfo implements Serializable {
         this.shopId = shopId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
